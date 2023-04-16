@@ -7,7 +7,7 @@ import { getToken } from '@/Functions/getToken'
 import ErrorComponent from '@/components/ErrorComponent'
 import { FaAngleDown } from 'react-icons/fa'
 import { MdAdd, MdClose } from 'react-icons/md'
-import { getRequest, postRequest } from '@/Functions/Requests'
+import { postRequest } from '@/Functions/Requests'
 import { Logout } from '@/Functions/Logout'
 
 
