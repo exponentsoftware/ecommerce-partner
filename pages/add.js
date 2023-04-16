@@ -177,14 +177,14 @@ export default function Add() {
                         </div>
                     </div>
                     <span className='w-full'>Upload Images</span>
-                    <div className='w-full grid grid-cols-2 gap-4 md:grid-cols-4'>
+                    <div className='w-full grid grid-cols-2 gap-4'>
                         <input name='img' ref={inputRef} type='file' className='hidden' accept='image/*' onChange={handleImageChange} />
                         {form.img1 ?
-                            <div className='w-full flex  relative'>
+                            <div className='w-full flex  relative min-h-36 md:min-h-48'>
                                 <img onClick={() => handleClick('img1')} src={form.img1} alt='' className={`w-full cursor-pointer`} />
                                 <MdClose onClick={() => handleImageDel('img1')} className='absolute text-xl top-0 right-0 cursor-pointer hover:text-2xl' />
                             </div>
-                            : <div onClick={() => handleClick('img1')} className={`w-full ${form.img1 || form.img2 || form.img3 || form.img4 ? '' : 'h-36 md:h-48'} cursor-pointer flex justify-center items-center bg-slate-100 rounded`}>
+                            : <div onClick={() => handleClick('img1')} className={`w-full min-h-[8rem] cursor-pointer flex justify-center items-center bg-slate-100 rounded`}>
                                 <MdAdd className="text-xl" />
                             </div>}
                         {form.img2 ?
@@ -192,7 +192,7 @@ export default function Add() {
                                 <img onClick={() => handleClick('img2')} src={form.img2} alt='' className={`w-full cursor-pointer`} />
                                 <MdClose onClick={() => handleImageDel('img2')} className='absolute text-xl top-0 right-0 cursor-pointer hover:text-2xl' />
                             </div>
-                            : <div onClick={() => handleClick('img2')} className={`w-full ${form.img1 || form.img2 || form.img3 || form.img4 ? '' : 'h-36 md:h-48'} cursor-pointer flex justify-center items-center bg-slate-100 rounded`}>
+                            : <div onClick={() => handleClick('img2')} className={`w-full cursor-pointer min-h-[8rem]  flex justify-center items-center bg-slate-100 rounded`}>
                                 <MdAdd className="text-xl" />
                             </div>}
                         {form.img3 ?
@@ -200,7 +200,7 @@ export default function Add() {
                                 <img onClick={() => handleClick('img3')} src={form.img3} alt='' className={`w-full cursor-pointer`} />
                                 <MdClose onClick={() => handleImageDel('img3')} className='absolute text-xl top-0 right-0 cursor-pointer hover:text-2xl' />
                             </div>
-                            : <div onClick={() => handleClick('img3')} className={`w-full ${form.img1 || form.img2 || form.img3 || form.img4 ? '' : 'h-36 md:h-48'} cursor-pointer flex justify-center items-center bg-slate-100 rounded`}>
+                            : <div onClick={() => handleClick('img3')} className={`w-full cursor-pointer min-h-[8rem]  flex justify-center items-center bg-slate-100 rounded`}>
                                 <MdAdd className="text-xl" />
                             </div>}
                         {form.img4 ?
@@ -208,7 +208,7 @@ export default function Add() {
                                 <img onClick={() => handleClick('img4')} src={form.img4} alt='' className={`cursor-pointer`} />
                                 <MdClose onClick={() => handleImageDel('img4')} className='absolute text-xl top-0 right-0 cursor-pointer hover:text-2xl' />
                             </div>
-                            : <div onClick={() => handleClick('img4')} className={`w-full ${form.img1 || form.img2 || form.img3 || form.img4 ? '' : 'h-36 md:h-48'} cursor-pointer flex justify-center items-center bg-slate-100 rounded`}>
+                            : <div onClick={() => handleClick('img4')} className={`w-full min-h-[8rem] cursor-pointer flex justify-center items-center bg-slate-100 rounded`}>
                                 <MdAdd className="text-xl" />
                             </div>}
                     </div>
