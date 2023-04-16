@@ -94,14 +94,14 @@ export default function Login() {
                 {getError && <ErrorComponent />}
                 <div className='w-full bg-white gap-4 pb-10 mt-20 flex flex-col'>
                     <form onSubmit={handleForm} className='w-full flex py-4 px-2 md:px-20 flex-col gap-8 md:w-1/2 mx-auto shadow-xl'>
-                        <span className='text-center font-semibold text-xl'>Login</span>
+                        <span className='text-center font-medium text-xl'>Login</span>
                         <Input type='email' data={data} setData={setData} placeholder='Email Address' name='email' value={data.email} />
                         <Input type='password' data={data} setData={setData} placeholder='Password' name='password' value={data.password} />
                         <div className='w-full text-sm font-medium flex gap-10'>
-                            <button disabled={error ? true : false} type='submit' className='rounded-full w-full border-[0.14rem] text-medium hover:bg-white hover:text-red-500 bg-red-500 text-white border-red-500 p-2'>Login</button>
-                            <Link className='rounded-full w-full border-[0.14rem] text-medium hover:bg-red-500 hover:text-white text-center bg-white text-red-500 border-red-500 p-2' href='/register'>Register</Link>
+                            <button disabled={error ? true : false} type='submit' className='rounded-full w-full border-[0.14rem] font-thin hover:bg-white hover:text-red-500 bg-red-500 text-white border-red-500 p-2'>Login</button>
+                            <Link className='rounded-full w-full border-[0.14rem] font-thin hover:bg-red-500 hover:text-white text-center bg-white text-red-500 border-red-500 p-2' href='/register'>Register</Link>
                         </div>
-                        {error && <div className='w-full p-3 text-sm font-medium rounded text-white bg-red-500'>
+                        {error && <div className='w-full p-3 text-sm font-medi rounded text-white bg-red-500'>
                             {error}
                         </div>}
                     </form>

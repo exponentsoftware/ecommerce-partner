@@ -7,6 +7,8 @@ import { getToken } from '@/Functions/getToken'
 import ErrorComponent from '@/components/ErrorComponent'
 import { FaAngleDown } from 'react-icons/fa'
 import { MdAdd, MdClose } from 'react-icons/md'
+import { getRequest, postRequest } from '@/Functions/Requests'
+import { Logout } from '@/Functions/Logout'
 
 
 const categoryList = ['Electronics', 'Footwear', 'Home, Kitchen, Pets', 'Beauty, Health, Grocery', 'Books', "Men's Fashion", "Women's Fashion", "Kid's Fashion"]
@@ -42,7 +44,7 @@ export default function Add() {
     }, [])
 
     const handleForm = (e) => {
-        setForm({...form, [e.target.name]: e.target.value})
+        setForm({ ...form, [e.target.name]: e.target.value })
     }
 
     const handleImageChange = (e) => {
@@ -61,72 +63,85 @@ export default function Add() {
         }
     }
 
-    const handleSubmit = () => {
-        if(!form.title){
+    const handleSubmit = async() => {
+        if (!form.title) {
             setError('Please add product title.')
             setTimeout(() => {
                 setError('')
             }, 5000)
         }
-        else if(!form.desc) {
+        else if (!form.desc) {
             setError('Please add product description.')
             setTimeout(() => {
                 setError('')
             }, 5000)
         }
-        else if(!form.price) {
+        else if (!form.price) {
             setError('Please add product price.')
             setTimeout(() => {
                 setError('')
             }, 5000)
         }
-        else if(form.price <= 0) {
+        else if (form.price <= 0) {
             setError("Product price can't be less than or equal to 0.")
             setTimeout(() => {
                 setError('')
             }, 5000)
         }
-        else if(!form.brand) {
+        else if (!form.brand) {
             setError('Please add product brand.')
             setTimeout(() => {
                 setError('')
             }, 5000)
         }
-        else if(!form.category) {
+        else if (!form.category) {
             setError('Please select product category.')
             setTimeout(() => {
                 setError('')
             }, 5000)
         }
-        else if(!form.img1 && !form.img2 && !form.img3 && !form.img4) {
+        else if (!form.img1 && !form.img2 && !form.img3 && !form.img4) {
             setError('Please add atleast one image.')
             setTimeout(() => {
                 setError('')
             }, 5000)
         }
-        else if(form.img1 && !form.img1Desc) {
+        else if (form.img1 && !form.img1Desc) {
             setError('Please add image 1 description.')
             setTimeout(() => {
                 setError('')
             }, 5000)
         }
-        else if(form.img2 && !form.img2Desc) {
+        else if (form.img2 && !form.img2Desc) {
             setError('Please add image 2 description.')
             setTimeout(() => {
                 setError('')
             }, 5000)
         }
-        else if(form.img3 && !form.img3Desc) {
+        else if (form.img3 && !form.img3Desc) {
             setError('Please add image 3 description.')
             setTimeout(() => {
                 setError('')
             }, 5000)
         }
-        else if(form.img4 && !form.img4Desc) {
+        else if (form.img4 && !form.img4Desc) {
             setError('Please add image 4 description.')
             setTimeout(() => {
                 setError('')
             }, 5000)
+        }
+        else {
+            const response = await postRequest('/api/addProduct', form);
+            console.log(response)
+            if(response.message && response.message === 'Unauthorized') {
+                router.push(Logout());
+            }
+            if (response.message && response.message.startsWith('Error')) {
+                setError(true);
+                setTimeout(() => {
+                    setError(false)
+                }, 6000)
+            }
         }
     }
 
@@ -170,7 +185,7 @@ export default function Add() {
                             {showCategory && <div className='absolute top-10 md:p-2 p-1 rounded border-2 border-slate-400 bg-white z-20 w-full left-0 right-0 flex flex-col'>
                                 {categoryList.map((e, i) => {
                                     return (
-                                        <span onClick={() => setForm({...form, category: e})} className='text-sm md:p-2 p-1 font-light rounded hover:bg-slate-300 text-black' key={`category-${i}`}>{e}</span>
+                                        <span onClick={() => setForm({ ...form, category: e })} className='text-sm md:p-2 p-1 font-light rounded hover:bg-slate-300 text-black' key={`category-${i}`}>{e}</span>
                                     )
                                 })}
                             </div>}

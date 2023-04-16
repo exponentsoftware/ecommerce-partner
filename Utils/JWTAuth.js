@@ -6,6 +6,7 @@ function JWTAuth(handler) {
     jwt.verify(token, process.env.JWT, (err, decoded) => {
       if (err) {
         res.json({message: 'Unauthorized'})
+        return;
       }
       req.user = decoded;
       return handler(req, res);
