@@ -28,7 +28,6 @@ const handler = async (req, res) => {
     try {
         await MongoDBConnect();
         const { title, desc, brand, category, price, img1, img2, img3, img4, img1Desc, img2Desc, img3Desc, img4Desc } = req.body.data;
-        const { data } = req.body;
         let image1, image2, image3, image4;
         if (img1) {
             console.log('UPLOADING IMG1')
@@ -38,7 +37,7 @@ const handler = async (req, res) => {
                 image1 = status.secure_url
             }
             else {
-                console.log('Error')
+                res.status(400).json({ message: 'Error, please try again...' })
             }
         }
         if (img2) {
@@ -49,7 +48,7 @@ const handler = async (req, res) => {
                 image2 = status.secure_url
             }
             else {
-                console.log('Error')
+                res.status(400).json({ message: 'Error, please try again...' })
             }
         }
         if (img3) {
@@ -60,7 +59,7 @@ const handler = async (req, res) => {
                 image3 = status.secure_url
             }
             else {
-                console.log('Error')
+                res.status(400).json({ message: 'Error, please try again...' })
             }
         }
         if (img4) {
@@ -71,7 +70,7 @@ const handler = async (req, res) => {
                 image4 = status.secure_url
             }
             else {
-                console.log('Error')
+                res.status(400).json({ message: 'Error, please try again...' })
             }
         }
         console.log('images', image1, image2, image3, image4)
@@ -103,8 +102,7 @@ const handler = async (req, res) => {
             thumbnail: image1 || image2 || image3 || image4
         })
         await product.save();
-        console.log("SAVED")
-
+        res.status(200).json({message: 'Success'})
     } catch (error) {
         res.status(400).json({ message: 'Error, please try again...' })
     }

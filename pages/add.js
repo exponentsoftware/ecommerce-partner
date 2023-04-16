@@ -63,7 +63,7 @@ export default function Add() {
         }
     }
 
-    const handleSubmit = async() => {
+    const handleSubmit = async () => {
         if (!form.title) {
             setError('Please add product title.')
             setTimeout(() => {
@@ -131,13 +131,27 @@ export default function Add() {
             }, 5000)
         }
         else {
-            const response = await postRequest('/api/addProduct', form);
-            console.log(response)
-            if(response.message && response.message === 'Unauthorized') {
-                router.push(Logout());
-            }
-            if (response.message && response.message.startsWith('Error')) {
-                setError(true);
+            try {
+                setLoading(true)
+                const response = await postRequest('/api/addProduct', form);
+                setLoading(false)
+                if (response.message && response.message === 'Unauthorized') {
+                    router.push(Logout());
+                }
+                if (response.message && response.message.startsWith('Error')) {
+                    setGetError(true);
+                    setTimeout(() => {
+                        setError(false)
+                    }, 6000)
+                }
+                else {
+                    setError('Successfully Added.')
+                    setTimeout(() => {
+                        setError('')
+                    }, 5000)
+                }
+            } catch (error) {
+                setGetError(true);
                 setTimeout(() => {
                     setError(false)
                 }, 6000)
