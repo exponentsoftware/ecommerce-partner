@@ -1,27 +1,61 @@
 import Navbar from '../components/Navbar'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Loading from '@/components/Loading'
 import { useRouter } from 'next/router'
 import { getToken } from '@/Functions/getToken'
 import ErrorComponent from '@/components/ErrorComponent'
-import {FaAngleDown} from 'react-icons/fa'
+import { FaAngleDown } from 'react-icons/fa'
+import { MdAdd, MdClose } from 'react-icons/md'
 
 
 const categoryList = ['Electronics', 'Footwear', 'Home, Kitchen, Pets', 'Beauty, Health, Grocery', 'Books', "Men's Fashion", "Women's Fashion", "Kid's Fashion"]
 
 export default function Add() {
+    const inputRef = useRef(null);
     const router = useRouter()
     const [getError, setGetError] = useState(false)
     const [loading, setLoading] = useState(false)
     const [showCategory, setShowCategory] = useState(false)
     const [category, setCategory] = useState('')
+    const [images, setImages] = useState({
+        img1: '',
+        img2: '',
+        img3: '',
+        img4: ''
+    })
+    const [selectedDiv, setSelectedDiv] = useState('')
 
     useEffect(() => {
         if (!getToken()) {
             router.push('/')
         }
     }, [])
+
+    const handleImageChange = (e) => {
+        let file = e.target.files[0];
+        setFileToBase(file);
+        e.target.value = ''
+    }
+
+    const setFileToBase = (file) => {
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setImages({...images, [selectedDiv]: reader.result})
+            }
+        }
+    }
+
+    const handleClick = (title) => {
+        setSelectedDiv(title)
+        inputRef.current.click()
+    }
+
+    const handleImageDel = (title) => {
+        setImages({...images, [title]: ''})
+    }
 
     return (
         <>
@@ -35,7 +69,7 @@ export default function Add() {
             <main className='w-full flex flex-col'>
                 <Navbar />
                 {getError && <ErrorComponent />}
-                <div className='w-full md:w-7/12 mx-auto p-2 items-center justify-center bg-white gap-4 pb-10 mt-20 flex flex-col'>
+                <div className='w-full md:w-7/12 mx-auto text-sm p-2 font-light items-center justify-center bg-white gap-4 pb-10 mt-20 flex flex-col'>
                     <span className='font-medium text-base uppercase mx-auto'>Add New Product</span>
                     <input placeholder='Product Name' className='rounded placeholder:text-slate-400 w-full placeholder:font-light font-light text-sm border-2 border-slate-400 p-2 outline-none' />
                     <textarea rows={8} placeholder='Product Description' className='rounded w-full placeholder:font-light placeholder:text-slate-400 font-light text-sm border-2 border-slate-400 p-2 outline-none' />
@@ -46,8 +80,8 @@ export default function Add() {
                         </div>
                         <input placeholder='Brand' type='text' className='flex items-center gap-2 rounded border-2 border-slate-400 p-2 w-full placeholder:font-normal font-light text-sm  outline-none' />
                         <div onClick={() => setShowCategory(!showCategory)} className='w-full flex relative items-center cursor-pointer justify-between rounded text-slate-400 font-light text-sm border-2 border-slate-400 p-2'>
-                            <span className='text-sm'>{category ? category : 'Category'}</span>
-                            <FaAngleDown className='text-xl' />
+                            <span className={`text-sm ${category && 'text-black'}`}>{category ? category : 'Category'}</span>
+                            <FaAngleDown className={`text-xl duration-700 transition-all ${showCategory ? 'rotate-180' : 'rotate-0'} `} />
                             {showCategory && <div className='absolute top-10 md:p-2 p-1 rounded border-2 border-slate-400 bg-white z-20 w-full left-0 right-0 flex flex-col'>
                                 {categoryList.map((e, i) => {
                                     return (
@@ -56,6 +90,42 @@ export default function Add() {
                                 })}
                             </div>}
                         </div>
+                    </div>
+                    <span className='w-full'>Upload Images</span>
+                    <div className='w-full grid grid-cols-2 gap-4 md:grid-cols-4'>
+                        <input name='img' ref={inputRef} type='file' className='hidden' accept='image/*' onChange={handleImageChange} />
+                        {images.img1 ?
+                            <div className='w-full flex  relative'>
+                                <img onClick={() => handleClick('img1')} src={images.img1} alt='' className={`w-full cursor-pointer`} />
+                                <MdClose onClick={() => handleImageDel('img1')} className='absolute text-xl top-0 right-0 cursor-pointer hover:text-2xl' />
+                            </div>
+                            : <div onClick={() => handleClick('img1')} className={`w-full ${images.img1 || images.img2 || images.img3 || images.img4 ? '' : 'h-36 md:h-48'} cursor-pointer flex justify-center items-center bg-slate-100 rounded`}>
+                                <MdAdd className="text-xl" />
+                            </div>}
+                            {images.img2 ?
+                            <div className='w-full flex relative'>
+                                <img onClick={() => handleClick('img2')} src={images.img2} alt='' className={`w-full cursor-pointer`} />
+                                <MdClose onClick={() => handleImageDel('img2')} className='absolute text-xl top-0 right-0 cursor-pointer hover:text-2xl' />
+                            </div>
+                            : <div onClick={() => handleClick('img2')} className={`w-full ${images.img1 || images.img2 || images.img3 || images.img4 ? '' : 'h-36 md:h-48'} cursor-pointer flex justify-center items-center bg-slate-100 rounded`}>
+                                <MdAdd className="text-xl" />
+                            </div>}
+                            {images.img3 ?
+                            <div className='w-full flex relative'>
+                                <img onClick={() => handleClick('img3')} src={images.img3} alt='' className={`w-full cursor-pointer`} />
+                                <MdClose onClick={() => handleImageDel('img3')} className='absolute text-xl top-0 right-0 cursor-pointer hover:text-2xl' />
+                            </div>
+                            : <div onClick={() => handleClick('img3')} className={`w-full ${images.img1 || images.img2 || images.img3 || images.img4 ? '' : 'h-36 md:h-48'} cursor-pointer flex justify-center items-center bg-slate-100 rounded`}>
+                                <MdAdd className="text-xl" />
+                            </div>}
+                            {images.img4 ?
+                            <div className={`w-full flex relative`}>
+                                <img onClick={() => handleClick('img4')} src={images.img4} alt='' className={`cursor-pointer`} />
+                                <MdClose onClick={() => handleImageDel('img4')} className='absolute text-xl top-0 right-0 cursor-pointer hover:text-2xl' />
+                            </div>
+                            : <div onClick={() => handleClick('img4')} className={`w-full ${images.img1 || images.img2 || images.img3 || images.img4 ? '' : 'h-36 md:h-48'} cursor-pointer flex justify-center items-center bg-slate-100 rounded`}>
+                                <MdAdd className="text-xl" />
+                            </div>}
                     </div>
                 </div>
                 {loading && <Loading />}
