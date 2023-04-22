@@ -75,7 +75,7 @@ const handler = async (req, res) => {
         }
         console.log('images', image1, image2, image3, image4)
         const product = new ProductModel({
-            userId: req.user.id,
+            sellerId: req.user.id,
             title: title,
             images: [
                 {

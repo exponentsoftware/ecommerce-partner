@@ -149,11 +149,26 @@ export default function Add() {
                     setTimeout(() => {
                         setError('')
                     }, 5000)
+                    setForm({
+                        title: '',
+                        desc: '',
+                        price: 499,
+                        brand: '',
+                        category: '',
+                        img1: '',
+                        img2: '',
+                        img3: '',
+                        img4: '',
+                        img1Desc: '',
+                        img2Desc: '',
+                        img3Desc: '',
+                        img4Desc: ''
+                    })
                 }
             } catch (error) {
                 setGetError(true);
                 setTimeout(() => {
-                    setError(false)
+                    setGetError(false)
                 }, 6000)
             }
         }

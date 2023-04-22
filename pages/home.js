@@ -7,18 +7,46 @@ import Loading from '@/components/Loading'
 import { useRouter } from 'next/router'
 import { getToken } from '@/Functions/getToken'
 import ErrorComponent from '@/components/ErrorComponent'
+import { getRequest } from '@/Functions/Requests'
 
 
 export default function Home() {
     const router = useRouter()
     const [getError, setGetError] = useState(false)
     const [loading, setLoading] = useState(true)
+    const [data, setData] = useState([])
 
     useEffect(() => {
-        if(!getToken()) {
+        if (!getToken()) {
             router.push('/')
         }
+        else {
+            getProduct()
+        }
     }, [])
+
+    const getProduct = async () => {
+        try {
+            setLoading(true)
+            const response = await getRequest('/api/getProduct');
+            if (response.message && response.message === 'Error, please try again') {
+                setGetError(true);
+                setTimeout(() => {
+                    setGetError(false)
+                }, 6000)
+            }
+            else {
+                setData(response)
+                setLoading(false)
+            }
+        } catch (error) {
+            setGetError(true);
+            setTimeout(() => {
+                setGetError(false)
+            }, 6000)
+        }
+    }
+
 
     return (
         <>
@@ -32,9 +60,28 @@ export default function Home() {
             <main className='w-100 flex flex-col'>
                 <Navbar />
                 {getError && <ErrorComponent />}
-                <div className='w-full bg-white gap-4 pb-10 mt-20 flex flex-col'>
-                    
-                </div>
+                {!loading && data.length >= 0 &&
+                    <div className='w-full bg-white gap-4 text-sm pb-10 md:px-4 px-2 grid grid-cols-1 md:grid-cols-4 mt-20'>
+                        <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col'>
+                            <span>Sales (this month)</span>
+                        </div>
+                        <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col'>
+                            <span>Delivered Products</span>
+                        </div>
+                        <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col'>
+                            <span>Recent Order</span>
+                        </div>
+                        <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col'>
+                            <span>Recent Products</span>
+                            {data.map((e, i) => {
+                                return (
+                                    <Link key={`recentProduct-${i}`} href={`/product/${e._id}`} className='px-2 text-red-500 text-ellipsis font-thin'>{i + 1}. {e.title}</Link>
+                                )
+                            })}
+                            <Link href='/recentProducts' className='ml-auto'>View All</Link>
+                        </div>
+                    </div>
+                }
                 {loading && <Loading />}
             </main>
         </>
