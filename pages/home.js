@@ -31,7 +31,6 @@ export default function Home() {
             const response = await getRequest('/api/getProduct');
             console.log(response)
             if (response.message && response.message === 'Unauthorized') {
-                console.log(true)
                 router.push(Logout());
             }
             else if (response.message && response.message === 'Error, please try again') {
