@@ -1,6 +1,5 @@
 import Navbar from '../components/Navbar'
 import Head from 'next/head'
-import Input from '@/components/Input'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Loading from '@/components/Loading'
@@ -8,6 +7,7 @@ import { useRouter } from 'next/router'
 import { getToken } from '@/Functions/getToken'
 import ErrorComponent from '@/components/ErrorComponent'
 import { getRequest } from '@/Functions/Requests'
+import { Logout } from '@/Functions/Logout'
 
 
 export default function Home() {
@@ -29,7 +29,12 @@ export default function Home() {
         try {
             setLoading(true)
             const response = await getRequest('/api/getProduct');
-            if (response.message && response.message === 'Error, please try again') {
+            console.log(response)
+            if (response.message && response.message === 'Unauthorized') {
+                console.log(true)
+                router.push(Logout());
+            }
+            else if (response.message && response.message === 'Error, please try again') {
                 setGetError(true);
                 setTimeout(() => {
                     setGetError(false)
@@ -40,6 +45,7 @@ export default function Home() {
                 setLoading(false)
             }
         } catch (error) {
+            console.log(error)
             setGetError(true);
             setTimeout(() => {
                 setGetError(false)

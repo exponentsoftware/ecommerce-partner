@@ -11,6 +11,14 @@ cloudinary.config({
     api_secret: process.env.api_secret
 });
 
+export const config = {
+    api: {
+      bodyParser: {
+        sizeLimit: '50mb',
+      },
+    },
+  }
+
 const uploadToCloudinary = async (image) => {
     try {
         const data = await cloudinary.v2.uploader.upload(image, { folder: 'E-commerce' });

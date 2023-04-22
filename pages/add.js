@@ -23,17 +23,17 @@ export default function Add() {
     const [form, setForm] = useState({
         title: '',
         desc: '',
-        price: 499,
+        price: 0,
         brand: '',
         category: '',
         img1: '',
         img2: '',
         img3: '',
         img4: '',
-        img1Desc: '',
-        img2Desc: '',
-        img3Desc: '',
-        img4Desc: ''
+        img1Desc: 'Desc1',
+        img2Desc: 'Desc2',
+        img3Desc: 'Desc3',
+        img4Desc: 'Desc4'
     })
     const [selectedDiv, setSelectedDiv] = useState('')
 
@@ -152,17 +152,17 @@ export default function Add() {
                     setForm({
                         title: '',
                         desc: '',
-                        price: 499,
+                        price: 0,
                         brand: '',
                         category: '',
                         img1: '',
                         img2: '',
                         img3: '',
                         img4: '',
-                        img1Desc: '',
-                        img2Desc: '',
-                        img3Desc: '',
-                        img4Desc: ''
+                        img1Desc: 'Desc1',
+                        img2Desc: 'Desc2',
+                        img3Desc: 'Desc3',
+                        img4Desc: 'Desc4'
                     })
                 }
             } catch (error) {
@@ -256,7 +256,7 @@ export default function Add() {
                                 <MdAdd className="text-xl" />
                             </div>}
                     </div>
-                    <div className='w-full grid gap-4 grid-cols-1 md:grid-cols-2'>
+                    <div className='w-full gap-4 hidden'>
                         {form.img1 && <textarea onChange={handleForm} value={form.img1Desc} name='img1Desc' rows={6} placeholder='Image 1 Description' className='rounded w-full placeholder:font-light placeholder:text-slate-400 font-light text-sm border-2 border-slate-400 p-2 outline-none' />}
                         {form.img2 && <textarea onChange={handleForm} value={form.img2Desc} name='img2Desc' rows={6} placeholder='Image 2 Description' className='rounded w-full placeholder:font-light placeholder:text-slate-400 font-light text-sm border-2 border-slate-400 p-2 outline-none' />}
                         {form.img3 && <textarea onChange={handleForm} value={form.img3Desc} name='img3Desc' rows={6} placeholder='Image 3 Description' className='rounded w-full placeholder:font-light placeholder:text-slate-400 font-light text-sm border-2 border-slate-400 p-2 outline-none' />}

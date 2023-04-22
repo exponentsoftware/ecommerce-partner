@@ -14,7 +14,7 @@ export default function Navbar() {
     return (
         <div className={`flex flex-row fixed z-20 gap-2 sm:gap-5 w-full items-center bg-red-500 justify-center p-3 box-border`}>
             <Link href='/home' className={`text-white sm:block font-medium mr-auto text-base`}><span className="font-semibold text-lg">EASY</span> ORDER</Link>
-            {token && !router.pathname.includes('/add') && <Link href={`/account`} className='p-2 sm:py-1 sm:px-3 flex flex-row justify-center items-center gap-1 rounded-full border-[0.14rem] border-white hover:bg-red-500  hover:text-white uppercase font-medium bg-white'>
+            {token && !router.pathname.includes('/add') && <Link href={`/add`} className='p-2 sm:py-1 sm:px-3 flex flex-row justify-center items-center gap-1 rounded-full border-[0.14rem] border-white hover:bg-red-500  hover:text-white uppercase font-medium bg-white'>
                 <MdAdd className="text-xl" />
                 <span className="text-sm hidden sm:block">New Product</span>
             </Link>}
