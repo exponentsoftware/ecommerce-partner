@@ -17,6 +17,9 @@ export default function Home() {
     const [loading, setLoading] = useState(true)
     const [products, setProducts] = useState([])
     const [orders, setOrders] = useState([])
+    const [ordersNumber, setOrdersNumber] = useState(0)
+    const [deliveredNumber, setdeliveredNumber] = useState(0)
+    const [newProductsNumber, setnewProductsNumber] = useState(0)
 
     useEffect(() => {
         if (!getToken()) {
@@ -44,6 +47,9 @@ export default function Home() {
                 console.log(response)
                 setProducts(response.sellerProducts)
                 setOrders(response.sellerOrders)
+                setnewProductsNumber(response.productLength.length)
+                setOrdersNumber(response.orderLength.length)
+                setdeliveredNumber(response.monthlyDelivered.length)
                 setLoading(false)
             }
         } catch (error) {
@@ -71,7 +77,7 @@ export default function Home() {
                     <div className='w-full bg-white gap-4 text-sm pb-10 md:px-4 px-2 grid grid-cols-1 md:grid-cols-4 mt-20'>
                         <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col justify-center items-center'>
                             <span className='w-full text-left'>Statistics (this month)</span>
-                            <Graph />
+                            <Graph orders={ordersNumber} delivered={deliveredNumber} newProducts={newProductsNumber} />
                         </div>
                         <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col'>
                             <span>Delivered Products</span>

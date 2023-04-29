@@ -35,7 +35,7 @@ const handler = async (req, res) => {
     }
     try {
         await MongoDBConnect();
-        const { title, desc, brand, category, price, img1, img2, img3, img4, img1Desc, img2Desc, img3Desc, img4Desc } = req.body.data;
+        const { title, desc, brand, category, addedOn, price, img1, img2, img3, img4, img1Desc, img2Desc, img3Desc, img4Desc } = req.body.data;
         let image1, image2, image3, image4;
         if (img1) {
             console.log('UPLOADING IMG1')
@@ -107,7 +107,8 @@ const handler = async (req, res) => {
             price: price,
             brand: brand,
             category: category,
-            thumbnail: image1 || image2 || image3 || image4
+            thumbnail: image1 || image2 || image3 || image4,
+            addedOn: addedOn,
         })
         await product.save();
         res.status(200).json({message: 'Success'})

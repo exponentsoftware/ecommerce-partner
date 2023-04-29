@@ -9,6 +9,7 @@ const Product = new mongoose.Schema({
     brand: String,
     category: String,
     thumbnail: String,
+    addedOn: String,
 });
 
 const ProductModel = mongoose.models.Products || mongoose.model('Products', Product);

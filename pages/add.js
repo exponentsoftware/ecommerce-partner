@@ -9,6 +9,7 @@ import { FaAngleDown } from 'react-icons/fa'
 import { MdAdd, MdClose } from 'react-icons/md'
 import { postRequest } from '@/Functions/Requests'
 import { Logout } from '@/Functions/Logout'
+import moment from 'moment/moment'
 
 
 const categoryList = ['Electronics', 'Footwear', 'Home, Kitchen, Pets', 'Beauty, Health, Grocery', 'Books', "Men's Fashion", "Women's Fashion", "Kid's Fashion"]
@@ -33,7 +34,8 @@ export default function Add() {
         img1Desc: 'Desc1',
         img2Desc: 'Desc2',
         img3Desc: 'Desc3',
-        img4Desc: 'Desc4'
+        img4Desc: 'Desc4',
+        addedOn: ''
     })
     const [selectedDiv, setSelectedDiv] = useState('')
 
@@ -133,6 +135,7 @@ export default function Add() {
         else {
             try {
                 setLoading(true)
+                form.addedOn = moment().format();
                 const response = await postRequest('/api/addProduct', form);
                 setLoading(false)
                 if (response.message && response.message === 'Unauthorized') {
@@ -162,7 +165,8 @@ export default function Add() {
                         img1Desc: 'Desc1',
                         img2Desc: 'Desc2',
                         img3Desc: 'Desc3',
-                        img4Desc: 'Desc4'
+                        img4Desc: 'Desc4',
+                        addedOn: ''
                     })
                 }
             } catch (error) {
