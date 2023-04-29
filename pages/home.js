@@ -8,6 +8,7 @@ import { getToken } from '@/Functions/getToken'
 import ErrorComponent from '@/components/ErrorComponent'
 import { getRequest } from '@/Functions/Requests'
 import { Logout } from '@/Functions/Logout'
+import Graph from '@/components/Graph'
 
 
 export default function Home() {
@@ -68,8 +69,9 @@ export default function Home() {
                 {getError && <ErrorComponent />}
                 {!loading &&
                     <div className='w-full bg-white gap-4 text-sm pb-10 md:px-4 px-2 grid grid-cols-1 md:grid-cols-4 mt-20'>
-                        <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col'>
-                            <span>Sales (this month)</span>
+                        <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col justify-center items-center'>
+                            <span className='w-full text-left'>Statistics (this month)</span>
+                            <Graph />
                         </div>
                         <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col'>
                             <span>Delivered Products</span>
