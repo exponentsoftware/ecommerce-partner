@@ -33,9 +33,6 @@ export const putRequest = async (path, field, data) => {
 export const postRequest = async (path, data) => {
     try {
         const response = await axios.post(path, { data });
-        if (response.message && response.message === 'Unauthorized') {
-            rou
-        }
         if (response.data.message === 'Success') {
             if (response.status.value) {
                 let bytes = CryptoJS.AES.decrypt(response.data.value, process.env.JWT);

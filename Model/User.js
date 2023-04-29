@@ -6,6 +6,8 @@ const Register = new mongoose.Schema({
     password: String,
     type: String,
     mobileNumber: String,
+    displayName: String,
+    address: String,
 });
 
 const RegisterModel = mongoose.models.UserData || mongoose.model('UserData', Register);

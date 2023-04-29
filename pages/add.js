@@ -141,11 +141,18 @@ export default function Add() {
                 if (response.message && response.message === 'Unauthorized') {
                     router.push(Logout());
                 }
-                if (response.message && response.message.startsWith('Error')) {
+                else if (response.message && response.message.startsWith('Error')) {
                     setGetError(true);
                     setTimeout(() => {
-                        setError(false)
-                    }, 6000)
+                        setGetError(false)
+                    }, 5000)
+                }
+                else if (response.message && response.message.startsWith('Please complete')) {
+                    console.log('XDFCvghbjnmk')
+                    setError('Please complete your profile.')
+                    setTimeout(() => {
+                        setError('')
+                    }, 5000)
                 }
                 else {
                     setError('Successfully Added.')
@@ -173,7 +180,7 @@ export default function Add() {
                 setGetError(true);
                 setTimeout(() => {
                     setGetError(false)
-                }, 6000)
+                }, 5000)
             }
         }
     }

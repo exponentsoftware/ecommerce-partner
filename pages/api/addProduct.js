@@ -3,6 +3,7 @@ import CryptoJS from 'crypto-js'
 import JWTAuth from "/Utils/JWTAuth"
 import cloudinary from 'cloudinary'
 import ProductModel from "@/Model/Products";
+import RegisterModel from "@/Model/User";
 
 
 cloudinary.config({
@@ -13,11 +14,11 @@ cloudinary.config({
 
 export const config = {
     api: {
-      bodyParser: {
-        sizeLimit: '50mb',
-      },
+        bodyParser: {
+            sizeLimit: '50mb',
+        },
     },
-  }
+}
 
 const uploadToCloudinary = async (image) => {
     try {
@@ -35,6 +36,24 @@ const handler = async (req, res) => {
     }
     try {
         await MongoDBConnect();
+
+        let responseData = await RegisterModel.findOne({ _id: req.user.id })
+        let bytesEmail = responseData.email ? CryptoJS.AES.decrypt(responseData.email, process.env.JWT) : '';
+        let decryptEmail = bytesEmail ? bytesEmail.toString(CryptoJS.enc.Utf8) : '';
+        let bytesFullName = responseData.fullName ? CryptoJS.AES.decrypt(responseData.fullName, process.env.JWT) : '';
+        let decryptFullName = bytesFullName ? bytesFullName.toString(CryptoJS.enc.Utf8) : '';
+        let bytesNumber = responseData.mobileNumber ? CryptoJS.AES.decrypt(responseData.mobileNumber, process.env.JWT) : '';
+        let decryptNumber = bytesNumber ? bytesNumber.toString(CryptoJS.enc.Utf8) : '';
+        let bytesDisplayName = responseData.displayName ? CryptoJS.AES.decrypt(responseData.displayName, process.env.JWT) : '';
+        let decryptDisplayName = bytesDisplayName ? bytesDisplayName.toString(CryptoJS.enc.Utf8) : '';
+        let bytesAddress = responseData.address ? CryptoJS.AES.decrypt(responseData.address, process.env.JWT) : '';
+        let decryptAddress = bytesAddress ? bytesAddress.toString(CryptoJS.enc.Utf8) : '';
+
+        if (!decryptEmail || decryptEmail === 'Empty' || !decryptFullName || decryptFullName === 'Empty' || !decryptNumber || decryptNumber === 'Empty' || !decryptDisplayName || decryptDisplayName === 'Empty' || !decryptAddress || decryptAddress === 'Empty') {
+            res.status(200).json({ message: 'Please complete your profile.' })
+            return;
+        }
+
         const { title, desc, brand, category, addedOn, price, img1, img2, img3, img4, img1Desc, img2Desc, img3Desc, img4Desc } = req.body.data;
         let image1, image2, image3, image4;
         if (img1) {
@@ -111,7 +130,7 @@ const handler = async (req, res) => {
             addedOn: addedOn,
         })
         await product.save();
-        res.status(200).json({message: 'Success'})
+        res.status(200).json({ message: 'Success' })
     } catch (error) {
         res.status(400).json({ message: 'Error, please try again...' })
     }

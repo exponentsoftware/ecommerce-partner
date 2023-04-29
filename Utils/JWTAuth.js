@@ -8,6 +8,10 @@ function JWTAuth(handler) {
         res.json({message: 'Unauthorized'})
         return;
       }
+      if(decoded.type !== 'Seller') {
+        res.json({message: 'Unauthorized'})
+        return;
+      }
       req.user = decoded;
       return handler(req, res);
     })
