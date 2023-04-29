@@ -17,6 +17,7 @@ export default function Home() {
     const [loading, setLoading] = useState(true)
     const [products, setProducts] = useState([])
     const [orders, setOrders] = useState([])
+    const [delivered, setDelivered] = useState([])
     const [ordersNumber, setOrdersNumber] = useState(0)
     const [deliveredNumber, setdeliveredNumber] = useState(0)
     const [newProductsNumber, setnewProductsNumber] = useState(0)
@@ -50,6 +51,7 @@ export default function Home() {
                 setnewProductsNumber(response.productLength.length)
                 setOrdersNumber(response.orderLength.length)
                 setdeliveredNumber(response.monthlyDelivered.length)
+                setDelivered(response.deliveredOrders)
                 setLoading(false)
             }
         } catch (error) {
@@ -79,24 +81,36 @@ export default function Home() {
                             <span className='w-full text-left'>Statistics (this month)</span>
                             <Graph orders={ordersNumber} delivered={deliveredNumber} newProducts={newProductsNumber} />
                         </div>
-                        <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col'>
-                            <span>Delivered Products</span>
+                        <div className='w-full shadow-lg p-2 h-auto rounded gap-2 flex flex-col'>
+                            <div className='w-full flex text-sm justify-between items-center'>
+                                <span>Recent Delivered</span>
+                                <Link href='/recentDelivered' className='ml-auto'>View All</Link>
+                            </div>
+                            {delivered.length >= 0 && delivered.map((e, i) => {
+                                return (
+                                    <Link key={`recentDelivered-${i}`} href={`/product/${e._id}`} className='px-2 text-red-500 text-ellipsis font-thin'>{i + 1}. {e.products[0].product.title}</Link>)
+                            })}
                         </div>
-                        <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col'>
-                            <span>Recent Order</span>
+                        <div className='w-full shadow-lg p-2 h-auto rounded gap-2 flex flex-col'>
+                            <div className='w-full flex text-sm justify-between items-center'>
+                                <span>Recent Order</span>
+                                <Link href='/recentOrders' className='ml-auto'>View All</Link>
+                            </div>
                             {orders.length >= 0 && orders.map((e, i) => {
                                 return (
-                                    <Link key={`recentProduct-${i}`} href={`/product/${e._id}`} className='px-2 text-red-500 text-ellipsis font-thin'>{i + 1}. {e.products[0].product.title}</Link>                            )
+                                    <Link key={`recentOrders-${i}`} href={`/product/${e._id}`} className='px-2 text-red-500 text-ellipsis font-thin'>{i + 1}. {e.products[0].product.title}</Link>)
                             })}
                         </div>
                         <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col'>
-                            <span>Recent Products</span>
+                            <div className='w-full flex text-sm justify-between items-center'>
+                                <span>Recent Products</span>
+                                <Link href='/recentProducts' className='ml-auto'>View All</Link>
+                            </div>
                             {products.length >= 0 && products.map((e, i) => {
                                 return (
                                     <Link key={`recentProduct-${i}`} href={`/product/${e._id}`} className='px-2 text-red-500 text-ellipsis font-thin'>{i + 1}. {e.title}</Link>
                                 )
                             })}
-                            <Link href='/recentProducts' className='ml-auto'>View All</Link>
                         </div>
                     </div>
                 }
