@@ -94,68 +94,82 @@ export default function Home() {
                 {!loading &&
                     <div className='flex w-full flex-col gap-2 overflow-hidden'>
                         <div className='w-full bg-white gap-4 text-sm pb-10 md:px-4 px-2 grid grid-cols-1 md:grid-cols-3 mt-20'>
-                            <div className='w-full p-2 rounded gap-2 flex flex-col justify-center items-center'>
+                            <div className='w-full p-2 rounded gap-2 flex flex-col'>
                                 <span className='w-full text-left font-medium'>Statistics (this month)</span>
-                                <Graph orders={ordersNumber} delivered={deliveredNumber} newProducts={newProductsNumber} />
+                                {ordersNumber || deliveredNumber || newProductsNumber
+                                    ?
+                                    <Graph orders={ordersNumber} delivered={deliveredNumber} newProducts={newProductsNumber} />
+                                    :
+                                    <span className='w-full flex justify-center font-medium m-auto'>Data not available</span>
+                                }
+
                             </div>
                             <div className='w-full p-2 h-auto rounded gap-2 flex flex-col'>
                                 <div className='w-full flex text-sm justify-between items-center'>
                                     <span className='font-medium'>Recent Delivered</span>
-                                    <Link href='/recentDelivered' className='ml-auto font-medium'>View All</Link>
+                                    {delivered.length > 0 &&
+                                        <Link href='/recentDelivered' className='ml-auto font-medium'>View All</Link>
+                                    }
                                 </div>
-                                {delivered.length >= 0 && delivered.map((e, i) => {
+                                {delivered.length > 0 ? delivered.map((e, i) => {
                                     return (
                                         <Link key={`recentDelivered-${i}`} href={`/product/${e._id}`} className='px-2 text-red-500 text-ellipsis font-medium'>{i + 1}. {e.products[0].product.title}</Link>)
-                                })}
+                                })
+                                    :
+                                    <span className='w-full flex justify-center font-medium m-auto'>Data not available</span>
+                                }
                             </div>
                             <div className='w-full p-2 rounded gap-2 flex flex-col'>
                                 <div className='w-full flex text-sm justify-between items-center'>
                                     <span className='font-medium'>Recent Products</span>
-                                    <Link href='/recentProducts' className='ml-auto font-medium'>View All</Link>
+                                    {products.length > 0 && <Link href='/recentProducts' className='ml-auto font-medium'>View All</Link>}
                                 </div>
-                                {products.length >= 0 && products.map((e, i) => {
+                                {products.length > 0 ? products.map((e, i) => {
                                     return (
                                         <Link key={`recentProduct-${i}`} href={`/product/${e._id}`} className='px-2 text-red-500 text-ellipsis font-medium'>{i + 1}. {e.title}</Link>
                                     )
-                                })}
+                                })
+                                    :
+                                    <span className='w-full flex justify-center font-medium m-auto'>Data not available</span>
+                                }
                             </div>
                         </div>
                         <div className='p-2 text-sm w-full overflow-hidden rounded flex flex-col'>
-                            <div className='w-full mb-4 flex text-sm uppercase justify-between items-center'>
+                            <div className='w-full mb-4 flex text-sm md:px-3 uppercase justify-between items-center'>
                                 <span className='font-medium'>Orders yet to deliver</span>
                                 <div className='flex gap-2'>
-                                    <button className='rounded bg-red-500 p-2 text-white tfont-medium'>Mark As Packed</button>
+                                    <button className='rounded bg-red-500 p-2 text-white font-medium'>Mark As Packed</button>
                                 </div>
                             </div>
 
-                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                            {orders.length >= 0 ? <div className="relative overflow-x-auto pb-4 mb-6 shadow-md sm:rounded-lg">
                                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" className="p-4">
                                             </th>
-                                            <th scope="col" className="p-4 font-medium">
+                                            <th scope="col" className="p-4">
                                                 Order ID
                                             </th>
-                                            <th scope="col" className="p-4 font-medium">
+                                            <th scope="col" className="p-4">
                                                 Product
                                             </th>
-                                            <th scope="col" className="p-4 font-medium">
+                                            <th scope="col" className="p-4">
                                                 Customer Name
                                             </th>
-                                            <th scope="col" className="p-4 w-[15rem] font-medium">
+                                            <th scope="col" className="p-4 w-[15rem]">
                                                 Delivery Address
                                             </th>
-                                            <th scope="col" className="p-4 font-medium">
+                                            <th scope="col" className="p-4">
                                                 Amount Paid
                                             </th>
-                                            <th scope="col" className="p-4 font-medium">
+                                            <th scope="col" className="p-4">
                                                 Payment Date & Time
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {orders.length >= 0 && orders.map((e, i) => {
+                                        {orders.map((e, i) => {
                                             return (
                                                 <tr key={`data${i}`} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                     <td className="w-4 p-4">
@@ -189,10 +203,10 @@ export default function Home() {
                                                     </td>
                                                     <td className="p-4 w-[15rem] font-medium">
                                                         <ResponsiveEllipsis text={e.DeliveryAddress}
-                                                                    maxLine='1'
-                                                                    ellipsis=''
-                                                                    trimRight
-                                                                    basedOn='letters' />
+                                                            maxLine='1'
+                                                            ellipsis=''
+                                                            trimRight
+                                                            basedOn='letters' />
                                                     </td>
                                                     <td className="p-4 whitespace-nowrap">
                                                         <span className='flex items-center font-medium'>
@@ -215,6 +229,11 @@ export default function Home() {
                                     </tbody>
                                 </table>
                             </div>
+                                :
+                                <div className='w-full flex justify-center'>
+                                    <span>No Order Yet.</span>
+                                </div>
+                            }
                         </div>
                     </div>
                 }
