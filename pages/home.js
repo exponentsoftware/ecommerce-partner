@@ -127,7 +127,7 @@ export default function Home() {
                                     <button className='rounded bg-red-500 p-2 text-white'>Mark As Packed</button>
                                 </div>
                             </div>
-                            <div className='w-full overflow-x-auto mt-2 mb-10'>
+                            <div className='w-full overflow-x-auto mt-2 pb-5 mb-5'>
                                 <div className='flex w-fit justify-start items-start'>
                                     <div className='w-[16rem] gap-2 justify-center text-xs items-center flex flex-col'>
                                         <span className='text-sm text-red-500'>Order ID</span>
@@ -196,15 +196,11 @@ export default function Home() {
                                             )
                                         })}
                                     </div>
-                                    <div className='w-[12rem] gap-2 justify-center text-xs items-center flex flex-col'>
+                                    <div className='w-[14rem] gap-2 justify-center text-xs items-center flex flex-col'>
                                         <span className='text-sm text-red-500'>Payment Completed</span>
                                         {orders.length >= 0 && orders.map((e, i) => {
                                             return (
-                                                <LinesEllipsis text={e.paymentDate}
-                                                            maxLine='1'
-                                                            ellipsis='...'
-                                                            trimRight
-                                                            basedOn='letters' />
+                                                <span>{e.paymentDate}</span>
                                             )
                                         })}
                                     </div>
