@@ -27,6 +27,7 @@ export default function Home() {
     const [ordersNumber, setOrdersNumber] = useState(0)
     const [deliveredNumber, setdeliveredNumber] = useState(0)
     const [newProductsNumber, setnewProductsNumber] = useState(0)
+    const [checked, setChecked] = useState()
 
     useEffect(() => {
         if (!getToken()) {
@@ -75,6 +76,15 @@ export default function Home() {
             setTimeout(() => {
                 setGetError(false)
             }, 6000)
+        }
+    }
+
+    const handleCheck = (id) => {
+        if(checked === id) {
+            setChecked()
+        }
+        else {
+            setChecked(id)
         }
     }
 
@@ -138,7 +148,7 @@ export default function Home() {
                             <div className='w-full mb-4 flex text-sm md:px-3 uppercase justify-between items-center'>
                                 <span className='font-medium'>Orders yet to deliver</span>
                                 <div className='flex gap-2'>
-                                    <button className='rounded bg-red-500 p-2 text-white font-medium'>Mark As Packed</button>
+                                    <button className='rounded bg-red-500 p-2 text-white font-medium disabled:bg-red-400' disabled={checked >= 0 ? false : true}>Mark As Packed</button>
                                 </div>
                             </div>
 
@@ -174,7 +184,7 @@ export default function Home() {
                                                 <tr key={`data${i}`} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                     <td className="w-4 p-4">
                                                         <div className="flex items-center">
-                                                            <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                            <input onClick={() => handleCheck(i)} checked={checked === i ? true : false} id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 cursor-pointer accent-red-500 text-red-500 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-500 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         </div>
                                                     </td>
                                                     <th scope="row" className="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
