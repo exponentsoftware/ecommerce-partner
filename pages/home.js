@@ -9,6 +9,12 @@ import ErrorComponent from '@/components/ErrorComponent'
 import { getRequest } from '@/Functions/Requests'
 import { Logout } from '@/Functions/Logout'
 import Graph from '@/components/Graph'
+import LinesEllipsis from 'react-lines-ellipsis'
+import responsiveHOC from 'react-lines-ellipsis/lib/responsiveHOC'
+import { BiRupee } from 'react-icons/bi'
+import moment from 'moment'
+const CryptoJS = require('crypto-js')
+const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis)
 
 
 export default function Home() {
@@ -45,16 +51,26 @@ export default function Home() {
                 }, 6000)
             }
             else {
-                console.log(response)
                 setProducts(response.sellerProducts)
-                setOrders(response.sellerOrders)
                 setnewProductsNumber(response.productLength.length)
                 setOrdersNumber(response.orderLength.length)
                 setdeliveredNumber(response.monthlyDelivered.length)
                 setDelivered(response.deliveredOrders)
                 setLoading(false)
+                const dataUpdate = await response.sellerOrders.map((e) => {
+                    let bytesFullName = CryptoJS.AES.decrypt(e.fullName, process.env.JWT);
+                    let decryptFullName = bytesFullName.toString(CryptoJS.enc.Utf8);
+                    let bytesAdress = CryptoJS.AES.decrypt(e.DeliveryAddress, process.env.JWT);
+                    let decryptAddress = bytesAdress.toString(CryptoJS.enc.Utf8)
+                    let stillUtc = moment.utc(e.paymentDate).toDate();
+                    let responseTime = moment(stillUtc).local().format('lll')
+                    return { ...e, fullName: decryptFullName, DeliveryAddress: decryptAddress, paymentDate: responseTime }
+                })
+                setOrders(dataUpdate)
+                console.log(dataUpdate)
             }
         } catch (error) {
+            console.log(error)
             setGetError(true);
             setTimeout(() => {
                 setGetError(false)
@@ -76,41 +92,124 @@ export default function Home() {
                 <Navbar />
                 {getError && <ErrorComponent />}
                 {!loading &&
-                    <div className='w-full bg-white gap-4 text-sm pb-10 md:px-4 px-2 grid grid-cols-1 md:grid-cols-4 mt-20'>
-                        <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col justify-center items-center'>
-                            <span className='w-full text-left'>Statistics (this month)</span>
-                            <Graph orders={ordersNumber} delivered={deliveredNumber} newProducts={newProductsNumber} />
-                        </div>
-                        <div className='w-full shadow-lg p-2 h-auto rounded gap-2 flex flex-col'>
-                            <div className='w-full flex text-sm justify-between items-center'>
-                                <span>Recent Delivered</span>
-                                <Link href='/recentDelivered' className='ml-auto'>View All</Link>
+                    <div className='flex w-full flex-col gap-2 overflow-hidden'>
+                        <div className='w-full bg-white gap-4 text-sm pb-10 md:px-4 px-2 grid grid-cols-1 md:grid-cols-3 mt-20'>
+                            <div className='w-full p-2 rounded gap-2 flex flex-col justify-center items-center'>
+                                <span className='w-full text-left'>Statistics (this month)</span>
+                                <Graph orders={ordersNumber} delivered={deliveredNumber} newProducts={newProductsNumber} />
                             </div>
-                            {delivered.length >= 0 && delivered.map((e, i) => {
-                                return (
-                                    <Link key={`recentDelivered-${i}`} href={`/product/${e._id}`} className='px-2 text-red-500 text-ellipsis font-thin'>{i + 1}. {e.products[0].product.title}</Link>)
-                            })}
-                        </div>
-                        <div className='w-full shadow-lg p-2 h-auto rounded gap-2 flex flex-col'>
-                            <div className='w-full flex text-sm justify-between items-center'>
-                                <span>Recent Order</span>
-                                <Link href='/recentOrders' className='ml-auto'>View All</Link>
+                            <div className='w-full p-2 h-auto rounded gap-2 flex flex-col'>
+                                <div className='w-full flex text-sm justify-between items-center'>
+                                    <span>Recent Delivered</span>
+                                    <Link href='/recentDelivered' className='ml-auto'>View All</Link>
+                                </div>
+                                {delivered.length >= 0 && delivered.map((e, i) => {
+                                    return (
+                                        <Link key={`recentDelivered-${i}`} href={`/product/${e._id}`} className='px-2 text-red-500 text-ellipsis font-thin'>{i + 1}. {e.products[0].product.title}</Link>)
+                                })}
                             </div>
-                            {orders.length >= 0 && orders.map((e, i) => {
-                                return (
-                                    <Link key={`recentOrders-${i}`} href={`/product/${e._id}`} className='px-2 text-red-500 text-ellipsis font-thin'>{i + 1}. {e.products[0].product.title}</Link>)
-                            })}
-                        </div>
-                        <div className='w-full shadow-lg p-2 rounded gap-2 flex flex-col'>
-                            <div className='w-full flex text-sm justify-between items-center'>
-                                <span>Recent Products</span>
-                                <Link href='/recentProducts' className='ml-auto'>View All</Link>
+                            <div className='w-full p-2 rounded gap-2 flex flex-col'>
+                                <div className='w-full flex text-sm justify-between items-center'>
+                                    <span>Recent Products</span>
+                                    <Link href='/recentProducts' className='ml-auto'>View All</Link>
+                                </div>
+                                {products.length >= 0 && products.map((e, i) => {
+                                    return (
+                                        <Link key={`recentProduct-${i}`} href={`/product/${e._id}`} className='px-2 text-red-500 text-ellipsis font-thin'>{i + 1}. {e.title}</Link>
+                                    )
+                                })}
                             </div>
-                            {products.length >= 0 && products.map((e, i) => {
-                                return (
-                                    <Link key={`recentProduct-${i}`} href={`/product/${e._id}`} className='px-2 text-red-500 text-ellipsis font-thin'>{i + 1}. {e.title}</Link>
-                                )
-                            })}
+                        </div>
+                        <div className='p-2 text-sm w-full overflow-hidden rounded flex flex-col'>
+                            <div className='w-full mb-4 flex text-sm uppercase justify-between items-center'>
+                                <span>Orders yet to deliver</span>
+                                <div className='flex gap-2'>
+                                    <button className='rounded bg-red-500 p-2 text-white'>Mark As Packed</button>
+                                </div>
+                            </div>
+                            <div className='w-full overflow-x-auto mt-2 mb-10'>
+                                <div className='flex w-fit justify-start items-start'>
+                                    <div className='w-[16rem] gap-2 justify-center text-xs items-center flex flex-col'>
+                                        <span className='text-sm text-red-500'>Order ID</span>
+                                        {orders.length >= 0 && orders.map((e, i) => {
+                                            return (
+                                                <Link key={`recentOrders-${i}`} href={`/product/${e._id}`} className=''>
+                                                    <ResponsiveEllipsis text={e.orderId}
+                                                        maxLine='1'
+                                                        ellipsis='...'
+                                                        trimRight
+                                                        basedOn='letters' />
+                                                </Link>
+                                            )
+                                        })}
+                                    </div>
+                                    <div className='w-[16rem] gap-2 justify-center text-xs items-center flex flex-col'>
+                                        <span className='text-sm text-red-500'>Product</span>
+                                        {orders.length >= 0 && orders.map((e, i) => {
+                                            return (
+                                                <ResponsiveEllipsis text={e.products[0].product.title}
+                                                    maxLine='1'
+                                                    ellipsis='...'
+                                                    trimRight
+                                                    basedOn='letters' />
+                                            )
+                                        })}
+                                    </div>
+                                    <div className='w-[13rem] gap-2 justify-center text-xs items-center flex flex-col'>
+                                        <span className='text-sm text-red-500'>Customer Name</span>
+                                        {orders.length >= 0 && orders.map((e, i) => {
+                                            return (
+                                                <ResponsiveEllipsis text={e.fullName}
+                                                    maxLine='1'
+                                                    ellipsis='...'
+                                                    trimRight
+                                                    basedOn='letters' />
+                                            )
+                                        })}
+                                    </div>
+                                    <div className='w-[16rem] gap-2 justify-center text-xs items-center flex flex-col'>
+                                        <span className='text-sm text-red-500'>Delivery Address</span>
+                                        {orders.length >= 0 && orders.map((e, i) => {
+                                            return (
+                                                <ResponsiveEllipsis text={e.DeliveryAddress}
+                                                    maxLine='1'
+                                                    ellipsis='...'
+                                                    trimRight
+                                                    basedOn='letters' />
+                                            )
+                                        })}
+                                    </div>
+                                    <div className='w-[12rem] gap-2 justify-center text-xs items-center flex flex-col'>
+                                        <span className='text-sm text-red-500'>Amount Paid</span>
+                                        {orders.length >= 0 && orders.map((e, i) => {
+                                            return (
+                                                <span className='flex items-center'>
+                                                    <BiRupee className='text-sm' />
+                                                    <span>
+                                                        <ResponsiveEllipsis text={e.grandTotal}
+                                                            maxLine='1'
+                                                            ellipsis='...'
+                                                            trimRight
+                                                            basedOn='letters' />
+                                                    </span>
+                                                </span>
+                                            )
+                                        })}
+                                    </div>
+                                    <div className='w-[12rem] gap-2 justify-center text-xs items-center flex flex-col'>
+                                        <span className='text-sm text-red-500'>Payment Completed</span>
+                                        {orders.length >= 0 && orders.map((e, i) => {
+                                            return (
+                                                <LinesEllipsis text={e.paymentDate}
+                                                            maxLine='1'
+                                                            ellipsis='...'
+                                                            trimRight
+                                                            basedOn='letters' />
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 }
