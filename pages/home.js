@@ -127,84 +127,93 @@ export default function Home() {
                                     <button className='rounded bg-red-500 p-2 text-white'>Mark As Packed</button>
                                 </div>
                             </div>
-                            <div className='w-full overflow-x-auto mt-2 pb-5 mb-5'>
-                                <div className='flex w-fit justify-start items-start'>
-                                    <div className='w-[16rem] gap-2 justify-center text-xs items-center flex flex-col'>
-                                        <span className='text-sm text-red-500'>Order ID</span>
+
+                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" className="p-4">
+                                            </th>
+                                            <th scope="col" className="p-4">
+                                                Order ID
+                                            </th>
+                                            <th scope="col" className="p-4">
+                                                Product
+                                            </th>
+                                            <th scope="col" className="p-4">
+                                                Customer Name
+                                            </th>
+                                            <th scope="col" className="p-4 w-[15rem]">
+                                                Delivery Address
+                                            </th>
+                                            <th scope="col" className="p-4">
+                                                Amount Paid
+                                            </th>
+                                            <th scope="col" className="p-4">
+                                                Payment Date & Time
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                         {orders.length >= 0 && orders.map((e, i) => {
                                             return (
-                                                <Link key={`recentOrders-${i}`} href={`/product/${e._id}`} className=''>
-                                                    <ResponsiveEllipsis text={e.orderId}
-                                                        maxLine='1'
-                                                        ellipsis='...'
-                                                        trimRight
-                                                        basedOn='letters' />
-                                                </Link>
-                                            )
-                                        })}
-                                    </div>
-                                    <div className='w-[16rem] gap-2 justify-center text-xs items-center flex flex-col'>
-                                        <span className='text-sm text-red-500'>Product</span>
-                                        {orders.length >= 0 && orders.map((e, i) => {
-                                            return (
-                                                <ResponsiveEllipsis text={e.products[0].product.title}
-                                                    maxLine='1'
-                                                    ellipsis='...'
-                                                    trimRight
-                                                    basedOn='letters' />
-                                            )
-                                        })}
-                                    </div>
-                                    <div className='w-[13rem] gap-2 justify-center text-xs items-center flex flex-col'>
-                                        <span className='text-sm text-red-500'>Customer Name</span>
-                                        {orders.length >= 0 && orders.map((e, i) => {
-                                            return (
-                                                <ResponsiveEllipsis text={e.fullName}
-                                                    maxLine='1'
-                                                    ellipsis='...'
-                                                    trimRight
-                                                    basedOn='letters' />
-                                            )
-                                        })}
-                                    </div>
-                                    <div className='w-[16rem] gap-2 justify-center text-xs items-center flex flex-col'>
-                                        <span className='text-sm text-red-500'>Delivery Address</span>
-                                        {orders.length >= 0 && orders.map((e, i) => {
-                                            return (
-                                                <ResponsiveEllipsis text={e.DeliveryAddress}
-                                                    maxLine='1'
-                                                    ellipsis='...'
-                                                    trimRight
-                                                    basedOn='letters' />
-                                            )
-                                        })}
-                                    </div>
-                                    <div className='w-[12rem] gap-2 justify-center text-xs items-center flex flex-col'>
-                                        <span className='text-sm text-red-500'>Amount Paid</span>
-                                        {orders.length >= 0 && orders.map((e, i) => {
-                                            return (
-                                                <span className='flex items-center'>
-                                                    <BiRupee className='text-sm' />
-                                                    <span>
-                                                        <ResponsiveEllipsis text={e.grandTotal}
+                                                <tr key={`data${i}`} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                    <td className="w-4 p-4">
+                                                        <div className="flex items-center">
+                                                            <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        </div>
+                                                    </td>
+                                                    <th scope="row" className="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        <Link href={`/order/${e._id}`} className='text-red-500'>
+                                                            {e.orderId}
+                                                            {/* <ResponsiveEllipsis text={e.orderId}
+                                                                maxLine='1'
+                                                                ellipsis='...'
+                                                                trimRight
+                                                                basedOn='letters' /> */}
+                                                        </Link>
+                                                    </th>
+                                                    <td className="p-4">
+                                                        <ResponsiveEllipsis key={`productId${i}`} text={e.products[0].product.title}
                                                             maxLine='1'
-                                                            ellipsis='...'
+                                                            ellipsis=''
                                                             trimRight
                                                             basedOn='letters' />
-                                                    </span>
-                                                </span>
+                                                    </td>
+                                                    <td className="p-4">
+                                                        <ResponsiveEllipsis text={e.fullName}
+                                                            maxLine='1'
+                                                            ellipsis=''
+                                                            trimRight
+                                                            basedOn='letters' />
+                                                    </td>
+                                                    <td className="p-4 w-[15rem]">
+                                                        <ResponsiveEllipsis text={e.DeliveryAddress}
+                                                                    maxLine='1'
+                                                                    ellipsis=''
+                                                                    trimRight
+                                                                    basedOn='letters' />
+                                                    </td>
+                                                    <td className="p-4 whitespace-nowrap">
+                                                        <span className='flex items-center'>
+                                                            <BiRupee className='text-sm' />
+                                                            <span>
+                                                                <ResponsiveEllipsis text={e.grandTotal}
+                                                                    maxLine='1'
+                                                                    ellipsis='...'
+                                                                    trimRight
+                                                                    basedOn='letters' />
+                                                            </span>
+                                                        </span>
+                                                    </td>
+                                                    <td className="p-4 whitespace-nowrap">
+                                                        {e.paymentDate}
+                                                    </td>
+                                                </tr>
                                             )
                                         })}
-                                    </div>
-                                    <div className='w-[14rem] gap-2 justify-center text-xs items-center flex flex-col'>
-                                        <span className='text-sm text-red-500'>Payment Completed</span>
-                                        {orders.length >= 0 && orders.map((e, i) => {
-                                            return (
-                                                <span>{e.paymentDate}</span>
-                                            )
-                                        })}
-                                    </div>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
