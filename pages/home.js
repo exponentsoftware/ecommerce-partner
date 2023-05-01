@@ -68,7 +68,7 @@ export default function Home() {
                     return { ...e, fullName: decryptFullName, DeliveryAddress: decryptAddress, paymentDate: responseTime }
                 })
                 setOrders(dataUpdate)
-                console.log(dataUpdate)
+                console.log(response)
             }
         } catch (error) {
             console.log(error)
@@ -80,12 +80,16 @@ export default function Home() {
     }
 
     const handleCheck = (id) => {
-        if(checked === id) {
+        if (checked === id) {
             setChecked()
         }
         else {
             setChecked(id)
         }
+    }
+
+    const handlePacked = () => {
+        console.log(checked)
     }
 
 
@@ -146,9 +150,9 @@ export default function Home() {
                         </div>
                         <div className='p-2 text-sm w-full overflow-hidden rounded flex flex-col'>
                             <div className='w-full mb-4 flex text-sm md:px-3 uppercase justify-between items-center'>
-                                <span className='font-medium'>Orders yet to deliver</span>
+                                <span className='font-medium'>Orders yet to Packed</span>
                                 <div className='flex gap-2'>
-                                    <button className='rounded bg-red-500 p-2 text-white font-medium disabled:bg-red-400' disabled={checked >= 0 ? false : true}>Mark As Packed</button>
+                                    <button onClick={handlePacked} className='rounded bg-red-500 p-2 text-white font-medium disabled:bg-red-400' disabled={checked ? false : true}>Mark As Packed</button>
                                 </div>
                             </div>
 
@@ -184,7 +188,109 @@ export default function Home() {
                                                 <tr key={`data${i}`} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                     <td className="w-4 p-4">
                                                         <div className="flex items-center">
-                                                            <input onClick={() => handleCheck(i)} checked={checked === i ? true : false} id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 cursor-pointer accent-red-500 text-red-500 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-500 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                            <input onClick={() => handleCheck(e._id)} checked={checked === e._id ? true : false} id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 cursor-pointer accent-red-500 text-red-500 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-500 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                        </div>
+                                                    </td>
+                                                    <th scope="row" className="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        <Link href={`/order/${e._id}`} className='text-red-500 font-medium'>
+                                                            {e.orderId}
+                                                            {/* <ResponsiveEllipsis text={e.orderId}
+                                                                maxLine='1'
+                                                                ellipsis='...'
+                                                                trimRight
+                                                                basedOn='letters' /> */}
+                                                        </Link>
+                                                    </th>
+                                                    <td className="p-4 font-medium">
+                                                        <ResponsiveEllipsis key={`productId${i}`} text={e.products[0].product.title}
+                                                            maxLine='1'
+                                                            ellipsis=''
+                                                            trimRight
+                                                            basedOn='letters' />
+                                                    </td>
+                                                    <td className="p-4 font-medium">
+                                                        <ResponsiveEllipsis text={e.fullName}
+                                                            maxLine='1'
+                                                            ellipsis=''
+                                                            trimRight
+                                                            basedOn='letters' />
+                                                    </td>
+                                                    <td className="p-4 w-[15rem] font-medium">
+                                                        <ResponsiveEllipsis text={e.DeliveryAddress}
+                                                            maxLine='1'
+                                                            ellipsis=''
+                                                            trimRight
+                                                            basedOn='letters' />
+                                                    </td>
+                                                    <td className="p-4 whitespace-nowrap">
+                                                        <span className='flex items-center font-medium'>
+                                                            <BiRupee className='text-sm' />
+                                                            <span>
+                                                                <ResponsiveEllipsis text={e.grandTotal}
+                                                                    maxLine='1'
+                                                                    ellipsis='...'
+                                                                    trimRight
+                                                                    basedOn='letters' />
+                                                            </span>
+                                                        </span>
+                                                    </td>
+                                                    <td className="p-4 whitespace-nowrap font-medium">
+                                                        {e.paymentDate}
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                                :
+                                <div className='w-full flex justify-center'>
+                                    <span>No Order Yet.</span>
+                                </div>
+                            }
+                        </div>
+
+                        <div className='p-2 text-sm w-full overflow-hidden rounded flex flex-col'>
+                            <div className='w-full mb-4 flex text-sm md:px-3 uppercase justify-between items-center'>
+                                <span className='font-medium'>Orders yet to Packed</span>
+                                <div className='flex gap-2'>
+                                    <button onClick={handlePacked} className='rounded bg-red-500 p-2 text-white font-medium disabled:bg-red-400' disabled={checked ? false : true}>Mark As Packed</button>
+                                </div>
+                            </div>
+
+                            {orders.length >= 0 ? <div className="relative overflow-x-auto pb-4 mb-6 shadow-md sm:rounded-lg">
+                                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" className="p-4">
+                                            </th>
+                                            <th scope="col" className="p-4">
+                                                Order ID
+                                            </th>
+                                            <th scope="col" className="p-4">
+                                                Product
+                                            </th>
+                                            <th scope="col" className="p-4">
+                                                Customer Name
+                                            </th>
+                                            <th scope="col" className="p-4 w-[15rem]">
+                                                Delivery Address
+                                            </th>
+                                            <th scope="col" className="p-4">
+                                                Amount Paid
+                                            </th>
+                                            <th scope="col" className="p-4">
+                                                Payment Date & Time
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {orders.map((e, i) => {
+                                            return (
+                                                <tr key={`data${i}`} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                    <td className="w-4 p-4">
+                                                        <div className="flex items-center">
+                                                            <input onClick={() => handleCheck(e._id)} checked={checked === e._id ? true : false} id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 cursor-pointer accent-red-500 text-red-500 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-500 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                         </div>
                                                     </td>
                                                     <th scope="row" className="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">

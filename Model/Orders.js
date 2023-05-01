@@ -17,6 +17,8 @@ const Order = new mongoose.Schema({
     shippingCharges: String,
     tax: String,
     grandTotal: String,
+    packedStatus: Boolean,
+    packedOn: String,
     deliveryStatus: Boolean,
     deliveredDate: String,
     deliveredBy: String,
