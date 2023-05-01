@@ -21,7 +21,6 @@ export default function notPacked() {
     const [getError, setGetError] = useState(false)
     const [loading, setLoading] = useState(true)
     const [orders, setOrders] = useState([])
-    const [checked, setChecked] = useState()
 
     useEffect(() => {
         if (!getToken()) {
@@ -35,7 +34,7 @@ export default function notPacked() {
     const getProduct = async () => {
         try {
             setLoading(true)
-            const response = await getRequest('/api/notpacked');
+            const response = await getRequest('/api/notdeliver');
             if (response.message && response.message === 'Unauthorized') {
                 router.push(Logout());
             }
@@ -54,7 +53,9 @@ export default function notPacked() {
                     let decryptAddress = bytesAdress.toString(CryptoJS.enc.Utf8)
                     let stillUtc = moment.utc(e.paymentDate).toDate();
                     let responseTime = moment(stillUtc).local().format('lll')
-                    return { ...e, fullName: decryptFullName, DeliveryAddress: decryptAddress, paymentDate: responseTime }
+                    let packedTime = moment.utc(e.packedOn).toDate();
+                    let defaultTime = moment(packedTime).local().format('lll')
+                    return { ...e, fullName: decryptFullName,packedOn: defaultTime, DeliveryAddress: decryptAddress, paymentDate: responseTime }
                 })
                 setOrders(dataUpdate)
             }
@@ -63,22 +64,6 @@ export default function notPacked() {
             setTimeout(() => {
                 setGetError(false)
             }, 6000)
-        }
-    }
-
-    const handleCheck = (id) => {
-        if (checked === id) {
-            setChecked()
-        }
-        else {
-            setChecked(id)
-        }
-    }
-
-    const handlePacked = async() => {
-        const data = await putRequest('/api/packed-update', checked);
-        if(data.message === 'Success') {
-            getProduct()
         }
     }
 
@@ -99,18 +84,13 @@ export default function notPacked() {
                     <div className='flex w-full flex-col gap-2 overflow-hidden mt-20'>
                         <div className='p-2 text-sm w-full overflow-hidden rounded flex flex-col'>
                             <div className='w-full mb-4 flex text-sm md:px-3 uppercase justify-between items-center'>
-                                <span className='font-medium'>Orders yet to Packed</span>
-                                <div className='flex gap-2'>
-                                    <button onClick={handlePacked} className='rounded hover:bg-red-600 bg-red-500 p-2 text-white font-medium disabled:bg-red-400' disabled={checked ? false : true}>Mark As Packed</button>
-                                </div>
+                                <span className='font-medium'>Orders yet to deliver</span>
                             </div>
 
                             {orders.length >= 0 ? <div className="relative overflow-x-auto pb-4 mb-6 shadow-md sm:rounded-lg">
                                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
-                                            <th scope="col" className="p-4">
-                                            </th>
                                             <th scope="col" className="p-4">
                                                 Order ID
                                             </th>
@@ -129,17 +109,15 @@ export default function notPacked() {
                                             <th scope="col" className="p-4">
                                                 Payment Date & Time
                                             </th>
+                                            <th scope="col" className="p-4">
+                                                Packed on
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {orders.map((e, i) => {
                                             return (
                                                 <tr key={`data${i}`} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                                    <td className="w-4 p-4">
-                                                        <div className="flex items-center">
-                                                            <input onChange={() => console.log()} onClick={() => handleCheck(e._id)} checked={checked === e._id ? true : false} id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 cursor-pointer accent-red-500 text-red-500 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-500 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                        </div>
-                                                    </td>
                                                     <th scope="row" className="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         <Link href={`/order/${e._id}`} className='text-red-500 font-medium'>
                                                             {e.orderId}
@@ -185,6 +163,9 @@ export default function notPacked() {
                                                     </td>
                                                     <td className="p-4 whitespace-nowrap font-medium">
                                                         {e.paymentDate}
+                                                    </td>
+                                                    <td className="p-4 whitespace-nowrap font-medium">
+                                                        {e.packedOn}
                                                     </td>
                                                 </tr>
                                             )

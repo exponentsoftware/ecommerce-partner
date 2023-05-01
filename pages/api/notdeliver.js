@@ -10,7 +10,7 @@ const handler = async (req, res) => {
     }
     try {
         await MongoDBConnect();
-        const notPacked = await OrdersModel.find({ 'products.product.sellerId': req.user.id, paymentStatus: true, deliveryStatus: false, packedStatus: {$ne: true} });
+        const notPacked = await OrdersModel.find({ 'products.product.sellerId': req.user.id, paymentStatus: true, deliveryStatus: false, packedStatus: true});
         let ciphertext = CryptoJS.AES.encrypt(JSON.stringify({ notPacked: notPacked }), process.env.JWT).toString();
         res.status(200).json({ message: 'Success', value: ciphertext })
     } catch (error) {

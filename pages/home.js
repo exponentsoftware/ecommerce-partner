@@ -9,12 +9,6 @@ import ErrorComponent from '@/components/ErrorComponent'
 import { getRequest } from '@/Functions/Requests'
 import { Logout } from '@/Functions/Logout'
 import Graph from '@/components/Graph'
-import LinesEllipsis from 'react-lines-ellipsis'
-import responsiveHOC from 'react-lines-ellipsis/lib/responsiveHOC'
-import { BiRupee } from 'react-icons/bi'
-import moment from 'moment'
-const CryptoJS = require('crypto-js')
-const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis)
 
 
 export default function Home() {
@@ -26,7 +20,6 @@ export default function Home() {
     const [ordersNumber, setOrdersNumber] = useState(0)
     const [deliveredNumber, setdeliveredNumber] = useState(0)
     const [newProductsNumber, setnewProductsNumber] = useState(0)
-    const [checked, setChecked] = useState()
 
     useEffect(() => {
         if (!getToken()) {
@@ -64,19 +57,6 @@ export default function Home() {
                 setGetError(false)
             }, 6000)
         }
-    }
-
-    const handleCheck = (id) => {
-        if (checked === id) {
-            setChecked()
-        }
-        else {
-            setChecked(id)
-        }
-    }
-
-    const handlePacked = () => {
-        console.log(checked)
     }
 
 

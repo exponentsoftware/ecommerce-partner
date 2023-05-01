@@ -51,10 +51,9 @@ export default function Navbar() {
                         </div>
                     </div>
                     <Link href={'/home'} className="p-4 mt-4 text-xs uppercase cursor-pointer hover:bg-red-50">home</Link>
-                    <Link href={'/packed'} className="p-4 text-xs uppercase cursor-pointer hover:bg-red-50">Orders packed</Link>
                     <Link href={'/notpacked'} className="p-4 text-xs uppercase cursor-pointer hover:bg-red-50">Orders not packed</Link>
-                    <Link href={'/delivered'} className="p-4 text-xs uppercase cursor-pointer hover:bg-red-50">Orders delivered</Link>
                     <Link href={'/notdelivered'} className="p-4 text-xs uppercase cursor-pointer hover:bg-red-50">Orders not delivered</Link>
+                    <Link href={'/delivered'} className="p-4 text-xs uppercase cursor-pointer hover:bg-red-50">Orders delivered</Link>
                     <Link href={'/allproducts'} className="p-4 text-xs uppercase cursor-pointer hover:bg-red-50">All Products</Link>
                 </>}
             </div>

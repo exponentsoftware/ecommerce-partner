@@ -148,7 +148,6 @@ export default function Add() {
                     }, 5000)
                 }
                 else if (response.message && response.message.startsWith('Please complete')) {
-                    console.log('XDFCvghbjnmk')
                     setError('Please complete your profile.')
                     setTimeout(() => {
                         setError('')
