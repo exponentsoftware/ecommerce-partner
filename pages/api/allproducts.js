@@ -1,7 +1,7 @@
 import MongoDBConnect from "@/Utils/MongoDB"
 import CryptoJS from 'crypto-js'
 import JWTAuth from "/Utils/JWTAuth"
-import OrdersModel from "@/Model/Orders";
+import ProductModel from "@/Model/Products";
 
 
 const handler = async (req, res) => {
@@ -10,8 +10,8 @@ const handler = async (req, res) => {
     }
     try {
         await MongoDBConnect();
-        const notPacked = await OrdersModel.find({ 'products.product.sellerId': req.user.id, paymentStatus: true, deliveryStatus: false, packedStatus: true});
-        let ciphertext = CryptoJS.AES.encrypt(JSON.stringify({ notDelivered: notPacked }), process.env.JWT).toString();
+        const sellerProducts = await ProductModel.find({ sellerId: req.user.id })
+        let ciphertext = CryptoJS.AES.encrypt(JSON.stringify({ allProduct: sellerProducts }), process.env.JWT).toString();
         res.status(200).json({ message: 'Success', value: ciphertext })
     } catch (error) {
         console.log(error)

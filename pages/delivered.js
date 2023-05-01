@@ -84,7 +84,7 @@ export default function notPacked() {
                     <div className='flex w-full flex-col gap-2 overflow-hidden mt-20'>
                         <div className='p-2 text-sm w-full overflow-hidden rounded flex flex-col'>
                             <div className='w-full mb-4 flex text-sm md:px-3 uppercase justify-between items-center'>
-                                <span className='font-medium'>Orders yet to deliver</span>
+                                <span className='font-medium'>Delivered Orders</span>
                             </div>
 
                             {orders.length >= 0 ? <div className="relative overflow-x-auto pb-4 mb-6 shadow-md sm:rounded-lg">
