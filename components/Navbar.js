@@ -51,8 +51,8 @@ export default function Navbar() {
                             <MdClose className="" />
                         </div>
                     </div>
-                    <span className="p-4 mt-4 text-xs uppercase cursor-pointer hover:bg-red-50">Orders not packed</span>
-                    <span className="p-4 text-xs uppercase cursor-pointer hover:bg-red-50">Orders not delivered</span>
+                    <Link href={'/notpacked'} className="p-4 mt-4 text-xs uppercase cursor-pointer hover:bg-red-50">Orders not packed</Link>
+                    <Link href={'/notdelivered'} className="p-4 text-xs uppercase cursor-pointer hover:bg-red-50">Orders not delivered</Link>
                 </>}
             </div>
         </div>
