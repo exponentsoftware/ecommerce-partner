@@ -34,7 +34,7 @@ export default function notPacked() {
     const getProduct = async () => {
         try {
             setLoading(true)
-            const response = await getRequest('/api/notdeliver');
+            const response = await getRequest('/api/deliver');
             if (response.message && response.message === 'Unauthorized') {
                 router.push(Logout());
             }
@@ -46,7 +46,7 @@ export default function notPacked() {
             }
             else {
                 setLoading(false)
-                const dataUpdate = await response.notDelivered.map((e) => {
+                const dataUpdate = await response.deliver.map((e) => {
                     let bytesFullName = CryptoJS.AES.decrypt(e.fullName, process.env.JWT);
                     let decryptFullName = bytesFullName.toString(CryptoJS.enc.Utf8);
                     let bytesAdress = CryptoJS.AES.decrypt(e.DeliveryAddress, process.env.JWT);
