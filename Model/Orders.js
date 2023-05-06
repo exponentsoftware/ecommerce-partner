@@ -19,6 +19,7 @@ const Order = new mongoose.Schema({
     grandTotal: String,
     packedStatus: Boolean,
     packedOn: String,
+    city: String,
     deliveryStatus: Boolean,
     deliveredDate: String,
     deliveredBy: String,
