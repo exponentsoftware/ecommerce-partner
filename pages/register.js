@@ -8,7 +8,10 @@ import Loading from '@/components/Loading'
 import { useRouter } from 'next/router'
 import { getToken } from '@/Functions/getToken'
 import ErrorComponent from '@/components/ErrorComponent'
+import { MdKeyboardArrowDown } from 'react-icons/md'
 
+
+const city = ['Agra', 'Delhi', 'Pune', 'Hydrabad', 'Chennai', 'Ahmedabad'];
 
 export default function Register() {
     const router = useRouter();
@@ -17,9 +20,13 @@ export default function Register() {
     const [data, setData] = useState({
         email: '',
         password: '',
-        type: 'Seller'
+        type: 'Partner',
+        mobileNumber: '',
+        city: '',
+        fullName: ''
     })
     const [getError, setGetError] = useState(false)
+    const [showDrop, setShowDrop] = useState(false)
 
     useEffect(() => {
         if (getToken()) {
@@ -29,7 +36,8 @@ export default function Register() {
 
     const handleForm = (e) => {
         e.preventDefault()
-        if (data.email && data.password && data.type) {
+        console.log(data)
+        if (data.email && data.password && data.type && data.fullName && data.mobileNumber && data.mobileNumber.length === 10 && data.city) {
             if (data.password.length >= 6) {
                 setLoading(true)
                 fetch('/api/register', {
@@ -66,6 +74,9 @@ export default function Register() {
                 setError('Password must be at least 6 characters.')
             }
         }
+        else if (data.mobileNumber.length !== 10) {
+            setError('Invalid Mobile Number')
+        }
         else {
             setError('Please fill all details...')
         }
@@ -91,13 +102,30 @@ export default function Register() {
                 <div className='w-full gap-4 pb-10 mt-20 flex flex-col'>
                     <form onSubmit={handleForm} className='w-full flex py-4 px-4 md:px-20 flex-col gap-8 md:w-1/2 mx-auto shadow-xl'>
                         <span className='text-center font-medium text-xl'>Register</span>
+                        <Input type='text' data={data} setData={setData} placeholder='Name' name='fullName' value={data.fullName} />
                         <Input type='email' data={data} setData={setData} placeholder='Email Address' name='email' value={data.email} />
                         <Input type='password' data={data} setData={setData} placeholder='Password' name='password' value={data.password} />
+                        <Input type='number' data={data} setData={setData} placeholder='Mobile Number' name='mobileNumber' value={data.mobileNumber} />
                         {/* <div className='grid grid-cols-2 sm:grid-cols-3 w-full items-center gap-5'>
                             <Label data={data} setData={setData} text='Customer' />
                             <Label data={data} setData={setData} text='Seller' />
                             <Label data={data} setData={setData} text='Partner' />
                         </div> */}
+                        <div className='w-full flex flex-col gap-2 text-sm'>
+                            <span>City</span>
+                            <div onClick={() => setShowDrop(!showDrop)} className='rounded-full cursor-pointer flex justify-between items-center bg-slate-200 py-2 px-4'>
+                                <span>{data.city ? data.city : 'Select city'}</span>
+                                <MdKeyboardArrowDown className={`${showDrop ? '-rotate-180' : 'rotate-0'} transition-all duration-700 text-lg`} />
+                            </div>
+                            <div className={`w-full flex flex-col gap-2 transition-all duration-1000 px-4 ${showDrop ? 'h-fit' : 'h-0 overflow-hidden'}`}>
+                                {city.map((e, i) => {
+                                    return (
+                                        <span onClick={() => { setData({ ...data, city: e }); setShowDrop(false) }} className='w-full hover:bg-slate-200 cursor-pointer p-1 px-2 rounded' key={`city-${i}`}>{e}</span>
+                                    )
+                                })}
+                            </div>
+
+                        </div>
                         <div className='w-full text-sm font-medium flex gap-10'>
                             <button type='submit' disabled={error ? true : false} className='rounded-full w-full border-[0.14rem] font-medium hover:bg-white hover:text-red-500 bg-red-500 text-white border-red-500 p-2'>Register</button>
                             <Link className='rounded-full w-full border-[0.14rem] font-medium hover:bg-red-500 hover:text-white text-center bg-white text-red-500 border-red-500 p-2' href='/'>Login</Link>

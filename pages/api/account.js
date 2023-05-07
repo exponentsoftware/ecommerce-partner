@@ -19,15 +19,15 @@ const handler = async (req, res) => {
         let decryptNumber = bytesNumber ? bytesNumber.toString(CryptoJS.enc.Utf8) : 'Empty';
         let bytesDisplayName = responseData.displayName ? CryptoJS.AES.decrypt(responseData.displayName, process.env.JWT) : '';
         let decryptDisplayName = bytesDisplayName ? bytesDisplayName.toString(CryptoJS.enc.Utf8) : 'Empty';
-        let bytesAddress = responseData.address ? CryptoJS.AES.decrypt(responseData.address, process.env.JWT) : '';
-        let decryptAddress = bytesAddress ? bytesAddress.toString(CryptoJS.enc.Utf8) : 'Empty';
+        let bytesCity = responseData.city ? CryptoJS.AES.decrypt(responseData.city, process.env.JWT) : '';
+        let decryptCity = bytesCity ? bytesCity.toString(CryptoJS.enc.Utf8) : 'Empty';
 
         /* Construct Account Data */
         const data = {
             name: decryptFullName,
             email: decryptEmail,
             number: decryptNumber,
-            address: decryptAddress,
+            city: decryptCity,
             displayName: decryptDisplayName,
             id: responseData._id
         }

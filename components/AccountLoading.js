@@ -6,7 +6,6 @@ export default function AccountLoading() {
                 <div className=" bg-slate-200 w-full h-16 rounded"></div>
                 <div className=" bg-slate-200 w-full h-16 rounded"></div>
                 <div className=" bg-slate-200 w-full h-16 rounded"></div>
-                <div className=" bg-slate-200 w-full h-16 rounded"></div>
             </div>
         </div>
     )
